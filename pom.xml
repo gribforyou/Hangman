@@ -16,7 +16,7 @@
         <revision>1.0.0</revision>
 
         <!-- Language -->
-        <maven.version>3.8.8</maven.version>
+        <maven.version>3.9.9</maven.version>
         <jdk.version>22</jdk.version>
         <java.release>22</java.release>
 
