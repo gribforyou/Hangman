@@ -16,7 +16,7 @@ public final class Word {
     private final int difficulty;// easy(1), medium(2) and hard(3)
 
     public Word(String text, String category, String hint, int difficulty) {
-        if(difficulty < 1 || difficulty > 3)
+        if (difficulty < 1 || difficulty > 3)
             throw new IllegalArgumentException("Difficulty must be between 1 and 3");
         this.text = text;
         this.category = category;
@@ -26,8 +26,8 @@ public final class Word {
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof Word word)) return false;
-        if(this.text.equals(word.text)) return true;
+        if (!(o instanceof Word word)) return false;
+        if (this.text.equals(word.text)) return true;
         return false;
     }
 
