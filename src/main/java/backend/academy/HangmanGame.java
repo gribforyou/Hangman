@@ -1,55 +1,42 @@
 package backend.academy;
 
-import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
+import java.util.List;
 
-public class HangmanGame implements Runnable {
+public class HangmanGame {
     private Dictionary dictionary;
-    public HangmanGame(Dictionary dictionary) {
-        if(dictionary.getCategories().isEmpty()){
+    private GameSession gameSession;
+    private HangmanVisualization hangmanVisualization;
+    private HangmanDialog hangmanDialog;
+
+    public HangmanGame(Dictionary dictionary, HangmanVisualization hangmanVisualization, HangmanDialog hangmanDialog) {
+        if(dictionary.isEmpty()){
             throw new IllegalArgumentException("Dictionary is empty!");
         }
         this.dictionary = dictionary;
+        this.hangmanVisualization = hangmanVisualization;
+        this.hangmanDialog = hangmanDialog;
     }
 
-    public void run(){
-        Start();
-        System.out.println(chooseCategory());
-    }
+    private void start(){
+        System.out.println("+---------------------+\n" +
+                           "|    Hangman game     |\n" +
+                           "+---------------------+");
 
-    private void Start(){
-        System.out.println(
-            "------------------\n"+
-            "|  Hangman Game  |\n"+
-            "------------------\n"
-        );
-    }
-
-    private String chooseCategory(){
+        System.out.println("Enter any string to play...");
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a category:");
-        for( String category : dictionary.getCategories()){
-            System.out.print(category+" ");
-        };
-        System.out.println();
-        System.out.println("or Press Enter to skip...");
-        String temp;
-        while(true){
-            temp = scanner.nextLine();
-            if(temp.isEmpty()){
-                int i = new Random().nextInt(dictionary.getCategories().size());
-                for( String category : dictionary.getCategories()){
-                    i--;
-                    if(i == 0){
-                        return category;
-                    }
-                }
-            }
-            else if(dictionary.getCategories().contains(temp)){
-                return temp;
-            }
-            System.out.println("There are not this category... Please try again!");
-        }
+        scanner.nextLine();
+    }
+
+    public void play(){
+        start();
+        do{
+            String category = hangmanDialog.getCategory(dictionary.getCategories());
+            Difficulty difficulty = hangmanDialog.getDifficulty();
+            Word word = dictionary.getWord(category, difficulty);
+            gameSession = new GameSession(word, hangmanVisualization, hangmanDialog);
+            gameSession.run();
+        }while(hangmanDialog.againOptionDialog());
+
     }
 }

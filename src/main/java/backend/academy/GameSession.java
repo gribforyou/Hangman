@@ -12,10 +12,12 @@ public class GameSession implements Runnable{
     private final HangmanVisualization hangmanVisualization;
     private Set<Character> triedList;
     private boolean getHint;
+    private HangmanDialog hangmanDialog;
 
-    public GameSession(Word word, HangmanVisualization hangmanVisualization) {
+    public GameSession(Word word, HangmanVisualization hangmanVisualization, HangmanDialog hangmanDialog) {
         this.word = word;
         this.hangmanVisualization = hangmanVisualization;
+        this.hangmanDialog = hangmanDialog;
         failCount = 0;
         getHint = false;
         triedList = new TreeSet<>();
@@ -38,12 +40,12 @@ public class GameSession implements Runnable{
 
     private void showCategory(){
         System.out.println("Category:\n" + word.category());
-        System.out.println("");
+        System.out.println();
     }
 
     private void showHint(){
         System.out.println("Hint:\n" + word.hint());
-        System.out.println("");
+        System.out.println();
     }
 
     private void showTriedSymbols(){
@@ -52,19 +54,19 @@ public class GameSession implements Runnable{
             for(Character tried : triedList){
                 System.out.print(tried + " ");
             }
-            System.out.println("");
-            System.out.println("");
+            System.out.println();
+            System.out.println();
         }
     }
 
     private void showHangman(){
         hangmanVisualization.visualizeHangman(failCount);
-        System.out.println("");
+        System.out.println();
     }
 
     private void showFailsToLose(){
         System.out.println("It's " + (MAX_FAILURE_COUNT - failCount) + " fails to lose!");
-        System.out.println("");
+        System.out.println();
     }
 
     private boolean isAlived(){
@@ -81,91 +83,36 @@ public class GameSession implements Runnable{
     }
 
     private void nextStep(){
-        Character ch = null;
-        while(ch == null){
-            try{
-                ch = getSymbol();
-            }
-            catch(IllegalArgumentException e){
-                System.out.println("Input error:\n" + e.getMessage());
-                System.out.println("Try again!");
-            }
-        }
+        Character ch = hangmanDialog.getSymbol(triedList);
         if(!word.text().contains(ch.toString())){
             System.out.println("There isn't this symbol(");
             failCount++;
             showHangman();
-            showFailsToLose();
-            if(failCount >= FAIL_COUNT_TO_GET_HINT && !getHint){
-                showHintDialog();
+            if(isAlived()){
+                showFailsToLose();
+                if(failCount >= FAIL_COUNT_TO_GET_HINT && !getHint){
+                    getHint = hangmanDialog.HintDialog();
+                }
             }
-
         }
         else{
             System.out.println("You got it!");
         }
         triedList.add(ch);
         System.out.println("==================================");
-        System.out.println("");
-    }
-
-    private Character getSymbol(){
-        System.out.println("Please enter a symbol:");
-        int temp = 0;
-        Character symbol = null;
-        Scanner in = new Scanner(System.in);
-        String enteredLine;
-        while(symbol == null) {
-            enteredLine = in.nextLine();
-            enteredLine = enteredLine.toLowerCase();
-            for (Character ch : enteredLine.toCharArray()) {
-                if (ch != ' ') {
-                    temp++;
-                    if (ch < 'a' || ch > 'z') {
-                        throw new IllegalArgumentException("Wrong symbol exist!");
-                    }
-                    if (temp > 1) {
-                        throw new IllegalArgumentException("Too many symbols!");
-                    }
-                    if (triedList.contains(ch)) {
-                        throw new IllegalArgumentException("You have already tried this symbol!");
-                    }
-                    symbol = ch;
-                }
-            }
-        }
-        return symbol;
-    }
-
-    public void showHintDialog(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("If you need a hint enter 'h' or anything else otherwise:");
-        Character symb = ' ';
-        int temp = 0;
-        String enteredLine =  sc.nextLine();
-        enteredLine = enteredLine.toLowerCase();
-        for(Character ch : enteredLine.toCharArray()){
-            if(ch != ' '){
-                temp++;
-                symb = ch;
-                if(temp > 1){
-                    return;
-                }
-            }
-        }
-        if(symb == 'h'){
-            getHint = true;
-        }
+        System.out.println();
     }
 
     private void congrates(){
         System.out.println("Congratulations! You win!");
         System.out.println("Guessed word:\n" + word.text().toUpperCase());
+        System.out.println();
     }
 
     private void lose(){
         System.out.println("You lose!");
         System.out.println("Guessed word:\n" + word.text().toUpperCase());
+        System.out.println();
     }
 
     @Override

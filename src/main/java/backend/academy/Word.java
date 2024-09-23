@@ -13,11 +13,9 @@ public final class Word {
     private final String hint;
 
     @Getter
-    private final int difficulty;// easy(1), medium(2) and hard(3)
+    private final Difficulty difficulty;// easy(1), medium(2) and hard(3)
 
-    public Word(String text, String category, String hint, int difficulty) {
-        if (difficulty < 1 || difficulty > 3)
-            throw new IllegalArgumentException("Difficulty must be between 1 and 3");
+    public Word(String text, String category, String hint, Difficulty difficulty) {
         this.text = text;
         this.category = category;
         this.hint = hint;
