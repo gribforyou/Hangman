@@ -47,7 +47,7 @@ public class Dictionary {
         }
         List<Word> goodWords = new ArrayList<>();
         for (Word word : words) {
-            if (word.category().toLowerCase().equals(category)) {
+            if (word.category().equalsIgnoreCase(category)) {
                 goodWords.add(word);
             }
         }
