@@ -1,4 +1,4 @@
-package backend.academy;
+package backend.academy.Hangman;
 
 public enum Difficulty {
     EASY,

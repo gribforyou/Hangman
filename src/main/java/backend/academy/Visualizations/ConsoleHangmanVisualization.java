@@ -1,8 +1,14 @@
-package backend.academy;
+package backend.academy.Visualizations;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Properties;
 
 public class ConsoleHangmanVisualization implements HangmanVisualization {
     private int maxAttempts;
-    private final String[] HANGMAN = new String[] {
+    private final PrintStream printStream = System.out;
+    private final String[] hangman = new String[] {
         " +---+\n |   |\n     |\n     |\n     |\n     |\n=========",
         " +---+\n |   |\n O   |\n     |\n     |\n     |\n=========",
         " +---+\n |   |\n O   |\n |   |\n     |\n     |\n=========",
@@ -12,8 +18,11 @@ public class ConsoleHangmanVisualization implements HangmanVisualization {
         " +---+\n |   |\n O   |\n/|\\  |\n/ \\  |\n     |\n========="
 };
 
-    public ConsoleHangmanVisualization(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
+    public ConsoleHangmanVisualization() throws IOException {
+        FileInputStream fis = new FileInputStream("src/main/resources/configs/config.properties");
+        Properties prop = new Properties();
+        prop.load(fis);
+        this.maxAttempts = Integer.parseInt(prop.getProperty("faultsToLose"));
     }
 
     @Override
@@ -21,7 +30,7 @@ public class ConsoleHangmanVisualization implements HangmanVisualization {
         if (attempts > maxAttempts || attempts < 0) {
             throw new IllegalArgumentException("Invalid attempts");
         }
-        int num = (HANGMAN.length-1)*attempts/maxAttempts;
-        System.out.println(HANGMAN[num]);
+        int num = (hangman.length - 1) * attempts / maxAttempts;
+        printStream.println(hangman[num]);
     }
 }

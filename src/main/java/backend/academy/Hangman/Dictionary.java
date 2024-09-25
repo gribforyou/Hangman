@@ -1,11 +1,9 @@
-package backend.academy;
+package backend.academy.Hangman;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Dictionary {
@@ -30,7 +28,7 @@ public class Dictionary {
             .collect(Collectors.toList());
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return words.isEmpty();
     }
 
@@ -44,7 +42,7 @@ public class Dictionary {
     }
 
     public Word getWord(String category) {
-        if(category == null){
+        if (category == null) {
             return getWord();
         }
         List<Word> goodWords = new ArrayList<>();
@@ -60,7 +58,7 @@ public class Dictionary {
     }
 
     public Word getWord(Difficulty difficulty) {
-        if(difficulty == Difficulty.ANY) {
+        if (difficulty == Difficulty.ANY) {
             return getWord();
         }
         List<Word> goodWords = new ArrayList<>();
@@ -70,16 +68,16 @@ public class Dictionary {
             }
         }
         if (goodWords.isEmpty()) {
-            throw new IllegalArgumentException("Difficulty " + difficulty + " not found");
+            throw new IllegalArgumentException(String.format("Difficulty %s not found", difficulty));
         }
         return goodWords.get(new Random().nextInt(goodWords.size()));
     }
 
     public Word getWord(String category, Difficulty difficulty) {
-        if(difficulty == Difficulty.ANY) {
+        if (difficulty == Difficulty.ANY) {
             return getWord(category);
         }
-        if(category == null){
+        if (category == null) {
             return getWord(difficulty);
         }
         List<Word> goodWords = new ArrayList<>();
@@ -89,7 +87,8 @@ public class Dictionary {
             }
         }
         if (goodWords.isEmpty()) {
-            throw new IllegalArgumentException("Words with " + difficulty + "level of difficulty not found in category " + category);
+            throw new IllegalArgumentException("Words with " + difficulty
+                + "level of difficulty not found in category " + category);
         }
         return goodWords.get(new Random().nextInt(goodWords.size()));
     }

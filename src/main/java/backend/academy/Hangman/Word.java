@@ -1,4 +1,4 @@
-package backend.academy;
+package backend.academy.Hangman;
 
 import lombok.Getter;
 
@@ -13,7 +13,7 @@ public final class Word {
     private final String hint;
 
     @Getter
-    private final Difficulty difficulty;// easy(1), medium(2) and hard(3)
+    private final Difficulty difficulty;
 
     public Word(String text, String category, String hint, Difficulty difficulty) {
         this.text = text;
@@ -24,9 +24,10 @@ public final class Word {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Word word)) return false;
-        if (this.text.equals(word.text)) return true;
-        return false;
+        if (!(o instanceof Word word)) {
+            return false;
+        }
+        return this.text.equals(word.text);
     }
 
     @Override
